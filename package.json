@@ -4,5 +4,13 @@
   "description": "Return the first found configuration file from a list of directories.",
   "main": "index.js",
   "author": "Sitraka Ratsimba <ratsimbasitraka@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "lab --coverage --lint",
+    "test-coverage": "lab --reporter html --output coverage.html"
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "lab": "^15.4.5"
+  }
 }
