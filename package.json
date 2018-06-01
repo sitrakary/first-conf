@@ -12,5 +12,8 @@
   "devDependencies": {
     "code": "^5.2.0",
     "lab": "^15.4.5"
+  },
+  "dependencies": {
+    "joi": "^13.3.0"
   }
 }
