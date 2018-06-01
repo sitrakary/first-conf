@@ -1,6 +1,6 @@
 {
   "name": "first-conf",
-  "version": "0.0.0-dev",
+  "version": "0.0.0-dev.0",
   "description": "Return the first found configuration file from a list of directories.",
   "main": "index.js",
   "author": "Sitraka Ratsimba <ratsimbasitraka@gmail.com>",
