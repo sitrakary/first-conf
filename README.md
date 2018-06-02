@@ -1,4 +1,5 @@
-[https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)
+[![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
+[![Build Status](https://travis-ci.org/sitrakary/first-conf.png?branch=master)](https://david-dm.org/sitrakary/first-conf)
 
 # First-Conf
 
