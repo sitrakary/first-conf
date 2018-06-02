@@ -1,6 +1,6 @@
 # first-conf
 
-**first-conf** returns configuration from a list of directories. It merge all configuration from each configuration file in a Javascript object.
+**first-conf** returns configuration from a list of directories.
 
 ## Installation
 
@@ -10,31 +10,24 @@ npm -i first-conf
 
 ## Basic usage
 
-This example assumes that you have `my-app/config.json` in on of directories in the list.
+This example assumes that you have `my-config.json` in on of directories in the list.
 
 ```js
-const FirstConf = require('first-conf');
+const FirstConf = require('first-conf')
 
-const internals.directories = [
+const config = FirstConf.get('my-config.json', {
+  directories: [
     '/etc',
-    '/home/sitrakary/.config',
     process.cwd()
-];
+  ]
+})
 
-const printConfig = async () => {
-
-
-    const firstConfig = new FirstConf('my-app/config.json', { directories });
-    const config = await firstConfig.get();
-    console.log(config);
-};
+console.log(config);
 ```
 
 ## API
 
-**first-conf** is composed of an unique class named `FirsConf`:
-
-- `constructor(configFilePath, options)`
+- `get(configFilePath [, options [, default]])`
 The constructor require two arguments:
     - `configPathPath`: the file configuration path relatives from directory to the configuration file.
     - `options`: An object containing options that control the behavior of **first-conf**.
