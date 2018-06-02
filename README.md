@@ -1,4 +1,6 @@
-# first-conf
+[https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)
+
+# First-Conf
 
 **first-conf** returns configuration from a list of directories.
 
@@ -27,9 +29,9 @@ console.log(config);
 
 ## API
 
-- `get(configFilePath [, options [, default]])`
-The constructor require two arguments:
-    - `configPathPath`: the file configuration path relatives from directory to the configuration file.
+- `get(filename, [options], [default])`
+Returns an object containing configuration where:
+    - `filename`: the name of the file where configurations are stored.
     - `options`: An object containing options that control the behavior of **first-conf**.
         - `directories`: an array containing a list of directory where **first-conf** will search the configuration file.
 - `get()`: returns an object containing configuration.

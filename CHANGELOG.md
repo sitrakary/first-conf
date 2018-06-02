@@ -1,4 +1,4 @@
-# first-conf Change Log
+# First-Conf Change Log
 
 All notable changes to this project will be documented in this file.
 
@@ -8,4 +8,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 Initial stable release.
 
+- Support only *JSON* configuration file.
 - Add function `get(filename, [options], [default])` to the API

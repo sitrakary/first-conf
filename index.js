@@ -1,64 +1,22 @@
-'use strict';
+// Copyright 2018 Sitraka Ratsimba
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom
+// the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 
-const Path = require('path');
-const Os = require('os');
-const Fs = require('fs');
-const Util = require('util');
-const Hoek = require('hoek');
-const Joi = require('joi');
+const { get } = require('./lib/first-conf')
 
-const internals = {};
-
-internals.defaultDirectories = [
-    '/etc',
-    Path.join(Os.homedir(), '.config'),
-    process.cwd()
-];
-
-internals.optionsSchema = Joi.object().keys({
-    directories: Joi.array().default(internals.defaultDirectories)
-});
-
-module.exports = class {
-    constructor(filemame, options) {
-
-        if (options === undefined) {
-            options = {};
-        }
-
-        const { error, value } = Joi.validate(options, internals.optionsSchema);
-
-        Hoek.assert(error === null, 'invalid options are passed to first-conf.');
-        this.directories = value.directories;
-        this.configPath = filemame;
-    }
-
-    getDirectories() {
-
-        return Hoek.clone(this.directories);
-    }
-
-    getConfigPath() {
-
-        return this.configPath;
-    }
-
-    async exists() {
-
-        const access = Util.promisify(Fs.access);
-        let exist = false;
-
-        for (const dir of this.directories) {
-            console.log(dir);
-            try {
-                exist = await access(Path.join(dir, this.configPath), Fs.constants.F_OK);
-                if (typeof exist === 'undefined') {
-                    exist = true;
-                    break;
-                }
-            }
-            catch (_e) {}
-        }
-        return exist;
-    }
-};
+module.exports.get = get

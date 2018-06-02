@@ -1,19 +1,29 @@
 {
   "name": "first-conf",
   "version": "0.0.0-dev.0",
-  "description": "Return the first found configuration file from a list of directories.",
+  "description": "Returns a configuration object from a file in a directory list.",
   "main": "index.js",
   "author": "Sitraka Ratsimba <ratsimbasitraka@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "lab --coverage --lint",
-    "test-coverage": "lab --reporter html --output coverage.html"
+    "lint": "standard",
+    "test": "mocha"
   },
+  "files": [
+    "lib/",
+    "CHANGELOG.md",
+    "index.js",
+    "README.md"
+  ],
   "devDependencies": {
-    "code": "^5.2.0",
-    "lab": "^15.4.5"
+    "code": "5.x.x",
+    "mocha": "5.x.x",
+    "standard": "11.0.x"
   },
   "dependencies": {
-    "joi": "^13.3.0"
-  }
+    "hoek": "5.x.x",
+    "lodash": "4.x.x"
+  },
+  "repository": "git@github.com:sitrakary/first-conf.git",
+  "bugs": "https://github.com/sitrakay/first-conf/issues"
 }

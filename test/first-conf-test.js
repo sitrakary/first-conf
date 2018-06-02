@@ -1,79 +1,126 @@
-'use strict';
+/* global describe it */
+const FirstConf = require('../lib/first-conf')
+const path = require('path')
+const { expect } = require('code')
 
-const Lab = require('lab');
-const FirstConf = require('..');
-const Path = require('path');
+describe('FirstConf', function () {
+  describe('constants', function () {
+    it('are immutable', function () {
+      expect(FirstConf.STRATEGIES.MERGE).to.be.not.undefined()
+      expect(() => {
+        'use strict'
+        FirstConf.STRATEGIES.MERGE = 3
+      }).to.throw()
+    })
+  })
 
-const { expect } = require('code');
+  describe('#create()', function () {
+    it('throw an error when file name is undefined', function () {
+      expect(() => FirstConf.create()).to.throw()
+    })
 
-const lab = exports.lab = Lab.script();
+    it('return a FirstConf object', function () {
+      expect(FirstConf.create('file')).to.be.an.object().and.not.empty()
+    })
 
-const directories = [
-    Path.join(process.cwd(), 'test', 'fixtures', 'etc'),
-    Path.join(process.cwd(), 'test', 'fixtures', 'home', 'sitrakary', '.conf')
-];
+    it('apply default directories options', function () {
+      const firstConf = FirstConf.create('file')
+      expect(firstConf.options.directories.length).to.be.above(0)
+    })
 
-lab.describe('FirstConf', () => {
+    it('merge user options with default options', function () {
+      const firstConf = FirstConf.create('file', {
+        directories: ['a']
+      })
+      expect(firstConf.options.directories).to.only.include(['a'])
+    })
 
-    lab.describe('constructor()', () => {
+    it('does not mutate options params', () => {
+      const options = {
+        directories: ['a'],
+        isWillBeRemoved: {}
+      }
+      const firstConf = FirstConf.create('file', options)
+      firstConf.options.isWillBeRemoved = { a: false }
+      expect(options.isWillBeRemoved).to.be.empty()
+    })
 
-        lab.it('Handle undefined options', () => {
+    it('merge all configuration by default', function () {
+      const firstConf = FirstConf.create('file')
+      expect(firstConf.options.strategy).to.be.equal(FirstConf.STRATEGIES.MERGE)
+    })
+  })
 
-            const config = new FirstConf('file');
+  describe('#loadConfigs()', function () {
+    it('return new FirstConf object containing a configs property', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      let firstConf = FirstConf.create('config.json', options)
+      firstConf = FirstConf.loadConfigs(firstConf)
 
-            expect(config.getDirectories()).to.be.an.array();
-            expect(config.getDirectories().length).to.be.above(0);
-        });
+      expect(firstConf.configs).to.be.an.array()
+    })
 
-        lab.it('throws an error when passing invalid options', () => {
+    it('load all configuration files', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      let firstConf = FirstConf.create('config.json', options)
+      firstConf = FirstConf.loadConfigs(firstConf)
+      expect(firstConf.configs.length).to.be.above(0)
+    })
+  })
 
-            const itThrow = () => {
+  describe('mergeConfigs()', function () {
+    it('merge configuration from to to bottum', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      let firstConf = FirstConf.create('config.json', options)
+      firstConf = FirstConf.loadConfigs(firstConf)
+      const config = FirstConf.mergeConfigs(firstConf)
+      expect(config.path).to.be.equal('x/y/z/config.json')
+      expect(config.unique).to.be.true()
+    })
+  })
 
-                new FirstConf('file', { invalid: '' });
-            };
+  describe('get(filename, options, defaultConfig)', function () {
+    it('return default configuration when no configuration was found for the filename', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      const config = FirstConf.get('unknown.json', options, { x: 1 })
+      expect(config.x).to.be.equal(1)
+    })
 
-            expect(itThrow).to.throw();
-        });
-    });
-
-    lab.describe('getDirectories()', () => {
-
-        lab.it('returns an array of configuration', () => {
-
-            const config = new FirstConf('file', {});
-
-            expect(config.getDirectories()).to.be.an.array();
-            expect(config.getDirectories().length).to.be.above(0);
-        });
-    });
-
-    lab.describe('getConfigPath()', () => {
-
-        lab.it('return the relative path to config file', () => {
-
-            const config = new FirstConf('first-conf/first.conf');
-            expect(config.getConfigPath()).to.be.equal('first-conf/first.conf');
-        });
-    });
-
-    lab.describe('exists()', () => {
-
-        lab.it('return true if the confg exists in path', async () => {
-
-            let config = new FirstConf('first-conf/first.conf', { directories });
-            let exists = await config.exists();
-            expect(exists).to.be.true();
-
-            config = new FirstConf('first-conf/config.js', { directories });
-            exists = await config.exists();
-            expect(exists).to.be.true();
-        });
-
-        lab.it('return false if the config file does not exists', async () => {
-
-            const config = new FirstConf('first-conf/nota.conf', { directories });
-            const exists = await config.exists();
-            expect(exists).to.be.false();
-        });
-    });
-});
+    it('it return configuration from directories', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      const config = FirstConf.get('config.json', options)
+      expect(config.path).to.be.equal('x/y/z/config.json', { x: 1 })
+      expect(config.unique).to.be.true()
+    })
+  })
+})
