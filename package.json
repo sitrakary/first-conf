@@ -1,6 +1,6 @@
 {
   "name": "first-conf",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Returns a configuration object from a file in a directory list.",
   "main": "index.js",
   "author": "Sitraka Ratsimba <ratsimbasitraka@gmail.com>",
