@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "standard",
-    "test": "mocha"
+    "test": "nyc mocha"
   },
   "files": [
     "lib/",
@@ -18,7 +18,8 @@
   "devDependencies": {
     "code": "5.x.x",
     "mocha": "5.x.x",
-    "standard": "11.0.x"
+    "nyc": "12.x.x",
+    "standard": "11.x.x"
   },
   "dependencies": {
     "hoek": "5.x.x",

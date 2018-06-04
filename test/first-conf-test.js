@@ -122,5 +122,21 @@ describe('FirstConf', function () {
       expect(config.path).to.be.equal('x/y/z/config.json', { x: 1 })
       expect(config.unique).to.be.true()
     })
+
+    it('merge config with defaul config when they are not set', function () {
+      const options = {
+        directories: [
+          path.join(process.cwd(), 'test', 'fixtures', 'a'),
+          path.join(process.cwd(), 'test', 'fixtures', 'm', 'n'),
+          path.join(process.cwd(), 'test', 'fixtures', 'x', 'y', 'z')
+        ]
+      }
+      const config = FirstConf.get('config.json', options, {
+        x: 2,
+        path: 'unsued'
+      })
+      expect(config.x).to.be.equal(2)
+      expect(config.path).to.be.equal('x/y/z/config.json')
+    })
   })
 })

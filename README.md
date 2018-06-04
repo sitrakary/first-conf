@@ -3,7 +3,7 @@
 
 # First-Conf
 
-**first-conf** returns configuration from a list of directories.
+**first-conf** returns a configuration object from a file in a directory list.
 
 ## Installation
 
@@ -25,17 +25,19 @@ const config = FirstConf.get('my-config.json', {
   ]
 })
 
-console.log(config);
+console.log(config)
 ```
-
+> A more complete example are shown [here](#)
 ## API
 
 - `get(filename, [options], [default])`
-Returns an object containing configuration where:
+returns an object containing configuration where:
     - `filename`: the name of the file where configurations are stored.
+
+    > Currently first-conf only supports JSON configuration files.
+
     - `options`: An object containing options that control the behavior of **first-conf**.
         - `directories`: an array containing a list of directory where **first-conf** will search the configuration file.
-- `get()`: returns an object containing configuration.
 
 ## Contributing
 
